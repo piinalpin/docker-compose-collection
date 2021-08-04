@@ -8,7 +8,7 @@ docker-compose -f $FILENAME down -v
 
 ### Redis
 
-**Redis Management**
+**Redis Browser**
 
 Go to `localhost:5001` fill host `redis` container. Default is `172.17.0.1`.
 
