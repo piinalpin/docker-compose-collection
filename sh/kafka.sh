@@ -22,7 +22,7 @@ fi
 
 if [ $# = 1 ]; then
     if [[ ! -f "$FILE" ]]; then
-        curl -o redis-compose.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yml
+        curl -o redis-compose.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yml
     fi
 
     if [ $* = "start" ]; then
