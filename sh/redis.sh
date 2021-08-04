@@ -13,7 +13,8 @@ $(basename "$0"): '$1' is not a ./$(basename "$0") command.
 See './$(basename "$0") --help'
 "
 
-FILE=redis-compose.yml
+FILE=redis.yml
+NAME=Redis
 
 if [ "$1" == "--help" ] ; then
     echo "$usage"
@@ -22,15 +23,15 @@ fi
 
 if [ $# = 1 ]; then
     if [[ ! -f "$FILE" ]]; then
-        curl -o redis-compose.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yml
+        curl -o $FILE https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/$FILE
     fi
 
     if [ $* = "start" ]; then
-        docker-compose -f redis-compose.yml up -d
-        echo "Redis has started."
+        docker-compose -f $FILE up -d
+        echo "$NAME has started."
     elif [ $* = "stop" ]; then
-        docker-compose -f redis-compose.yml down -v
-        echo "Redis has stopped."
+        docker-compose -f $FILE down -v
+        echo "$NAME has stopped."
     else
         echo "$help"
         exit 0
