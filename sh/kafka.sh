@@ -4,8 +4,8 @@ usage="
 Usage ./$(basename "$0") COMMAND
 
 Commands:
-    start   start redis server
-    stop    stop redis server
+    start   start kafka server
+    stop    stop kafka server
 "
 
 help="
