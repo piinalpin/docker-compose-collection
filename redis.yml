@@ -17,7 +17,7 @@ services:
     ports:
       - "5001:5001"
     image: marian/rebrow
-    container_name: redis-management
+    container_name: redis-browser
     links:
       - redis
     networks:
