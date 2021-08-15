@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonar
+    ports:
+      - '9000:9000'
+      - '9002:9002'
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-extensions:/opt/sonarqube/extensions
+      - sonarqube-logs:/opt/sonarqube/logs
+      - sonarqube-temp:/opt/sonarqube/temp
+    networks:
+      - my-network
+
+volumes:
+  sonarqube-data:
+    external: true
+  sonarqube-extensions:
+    external: true
+  sonarqube-logs:
+    external: true
+  sonarqube-temp:
+    external: true
+
+networks:
+  my-network:
+    external: true

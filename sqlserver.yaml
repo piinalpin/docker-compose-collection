@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    ports:
+      - '1434:1433'
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - sqlserver-user:/var/opt/sqlserver
+    environment:
+      # Default user is -> sa
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'SevenEightTwo782' # Change to your unique password
+    networks:
+      - my-network
+
+volumes:
+  sqlserver-data:
+    external: true
+  sqlserver-user:
+    external: true
+
+networks:
+  my-network:
+    external: true
