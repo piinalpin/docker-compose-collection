@@ -5,7 +5,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: sqlserver
     ports:
-      - '1434:1433'
+      - '1433:1433'
     volumes:
       - sqlserver-data:/var/opt/mssql
       - sqlserver-user:/var/opt/sqlserver
