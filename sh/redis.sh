@@ -13,7 +13,7 @@ $(basename "$0"): '$1' is not a ./$(basename "$0") command.
 See './$(basename "$0") --help'
 "
 
-FILE=~/redis.yml
+FILE=~/redis.yaml
 NAME=Redis
 
 if [ "$1" == "--help" ] ; then
