@@ -58,6 +58,12 @@ dir=pouncher
 mkdir -p $dir
 
 if [ $command == "start" ]; then
+    net=`docker network ls -q -f name=my-network`
+    if [ -z "$net" ];  then
+        net=`docker network create my-network`
+        echo "Create docker network: $net"
+    fi
+
     case $name in
     kafka)
         if [[ ! -f ~/$dir/kafka-cli.yaml ]]; then
@@ -74,11 +80,11 @@ if [ $command == "start" ]; then
             curl -o ~/$dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mysql.yaml
         fi
         
-        vol=`docker volume ls -q -f name=mysql-data`
+        mysqlData=`docker volume ls -q -f name=mysql-data`
 
-        if [ -z "$vol" ];  then
-            volumeName=`docker volume create mysql-data`
-            echo "Create docker volume: $volumeName"
+        if [ -z "$mysqlData" ];  then
+            mysqlData=`docker volume create mysql-data`
+            echo "Create docker volume: $mysqlData"
         fi
 
         docker-compose -f ~/$dir/mysql.yaml up -d
@@ -91,11 +97,11 @@ if [ $command == "start" ]; then
             curl -o ~/$dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/postgresql.yaml
         fi
         
-        vol=`docker volume ls -q -f name=postgre-data`
+        postgreData=`docker volume ls -q -f name=postgre-data`
 
-        if [ -z "$vol" ];  then
-            volumeName=`docker volume create postgre-data`
-            echo "Create docker volume: $volumeName"
+        if [ -z "$postgreData" ];  then
+            postgreData=`docker volume create postgre-data`
+            echo "Create docker volume: $postgreData"
         fi
 
         docker-compose -f ~/$dir/postgresql.yaml up -d
