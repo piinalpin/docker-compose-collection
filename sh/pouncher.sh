@@ -70,7 +70,7 @@ if [ $command == "start" ]; then
             curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
         fi
 
-        docker-compose -f ~/$dir/kafka-cli.yaml up -d
+        docker compose -f ~/$dir/kafka-cli.yaml -p kafka-cli up -d 
 
         echo "Kafka has started."
         exit 0
@@ -87,7 +87,7 @@ if [ $command == "start" ]; then
             echo "Create docker volume: $mysqlData"
         fi
 
-        docker-compose -f ~/$dir/mysql.yaml up -d
+        docker compose -f ~/$dir/mysql.yaml -p mysql up -d
 
         echo "MySQL has started."
         exit 0
@@ -104,7 +104,7 @@ if [ $command == "start" ]; then
             echo "Create docker volume: $postgreData"
         fi
 
-        docker-compose -f ~/$dir/postgresql.yaml up -d
+        docker compose -f ~/$dir/postgresql.yaml -p postgresql up -d
 
         echo "PostgreSQL has started."
         exit 0
@@ -128,7 +128,7 @@ if [ $command == "start" ]; then
             fi
         fi
 
-        docker-compose -f ~/$dir/rabbitmq.yaml up -d
+        docker compose -f ~/$dir/rabbitmq.yaml -p rabbitmq up -d
 
         echo "RabbitMQ has started."
         exit 0
@@ -138,7 +138,7 @@ if [ $command == "start" ]; then
             curl -o ~/$dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yaml
         fi
 
-        docker-compose -f ~/$dir/redis.yaml up -d
+        docker compose -f ~/$dir/redis.yaml -p redis up -d
 
         echo "Redis has started."
         exit 0
@@ -176,7 +176,7 @@ if [ $command == "start" ]; then
             fi
         fi
 
-        docker-compose -f ~/$dir/sonarqube.yaml up -d
+        docker compose -f ~/$dir/sonarqube.yaml -p sonarqube up -d
 
         echo "Sonarqube has started."
         exit 0
@@ -200,7 +200,7 @@ if [ $command == "start" ]; then
             fi
         fi
 
-        docker-compose -f ~/$dir/sqlserver.yaml up -d
+        docker compose -f ~/$dir/sqlserver.yaml -p sqlserver up -d
 
         echo "SQLServer has started."
         exit 0
@@ -216,7 +216,7 @@ elif [ $command == "stop" ]; then
         if [[ ! -f ~/$dir/kafka-cli.yaml ]]; then
             curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
         fi
-        docker-compose -f ~/$dir/kafka-cli.yaml down -v
+        docker compose -f ~/$dir/kafka-cli.yaml -p kafka-cli down -v
         echo "Kafka has stopped."
     ;;
     mysql)
@@ -224,7 +224,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mysql.yaml
         fi
 
-        docker-compose -f ~/$dir/mysql.yaml down -v
+        docker compose -f ~/$dir/mysql.yaml -p mysql down -v
 
         echo "MySQL has stopped."
         exit 0
@@ -234,7 +234,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/postgresql.yaml
         fi
 
-        docker-compose -f ~/$dir/postgresql.yaml down -v
+        docker compose -f ~/$dir/postgresql.yaml -p postgresql down -v
 
         echo "PostgreSQL has stopped."
         exit 0
@@ -244,7 +244,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/rabbitmq.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/rabbitmq.yaml
         fi
 
-        docker-compose -f ~/$dir/rabbitmq.yaml down -v
+        docker compose -f ~/$dir/rabbitmq.yaml -p rabbitmq down -v
 
         echo "RabbitMQ has stopped."
         exit 0
@@ -254,7 +254,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yaml
         fi
 
-        docker-compose -f ~/$dir/redis.yaml down -v
+        docker compose -f ~/$dir/redis.yaml -p redis down -v
 
         echo "Redis has stopped."
         exit 0
@@ -264,7 +264,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/sonarqube.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sonarqube.yaml
         fi
 
-        docker-compose -f ~/$dir/sonarqube.yaml down -v
+        docker compose -f ~/$dir/sonarqube.yaml -p sonarqube down -v
 
         echo "Sonarqube has stopped."
         exit 0
@@ -274,7 +274,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/sqlserver.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sqlserver.yaml
         fi
 
-        docker-compose -f ~/$dir/sqlserver.yaml down -v
+        docker compose -f ~/$dir/sqlserver.yaml -p sqlserver down -v
 
         echo "SQLServer has stopped."
         exit 0
