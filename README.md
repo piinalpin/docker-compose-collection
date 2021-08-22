@@ -53,15 +53,26 @@ set [KEY_NAME] [VALUE]
 get [KEY_NAME]
 ```
 
-**Redis Browser**
+**Another Redis Desktop Manager**
 
-Go to `localhost:5001` fill host `redis` container. Default is `172.17.0.1`.
+Install [Another Redis Desktop Manager](https://formulae.brew.sh/cask/another-redis-desktop-manager) with homebrew. You can run with following command on your terminal.
 
-![Redis Browser](images/redis1.png)
+```bash
+brew install cask 
+brew install --cask another-redis-desktop-manager
+```
 
-Redis Browser Dashboard
+Open the application, and should looks like below.
 
-![Redis Browser Dashboard](images/redis2.png)
+![Another RDM](images/redis1.png)
+
+Another Redis Desktop Manager dashboard
+
+![Another RDM - Dashboard](images/redis2.png)
+
+Another Redis Desktop Manager add new key.
+
+![Another RDM - Add New Key](images/redis3.png)
 
 ## MySQL
 
