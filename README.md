@@ -268,10 +268,10 @@ Default Sonarqube management user is `admin` and password is `admin`. Go to `loc
 Download docker compose configuration using curl
 
 ```bash
-curl -o sonarqube.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mongodb.yaml
+curl -o mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mongodb.yaml
 ```
 
-This yaml `sonarqube.yaml` will create a new container `sonarqube` and exposed port `27017` on host port.
+This yaml `mongodb.yaml` will create a new container `mongodb` and exposed port `27017` on host port.
 
 Create network `my-network` if does not exists
 
