@@ -1,0 +1,26 @@
+---
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:5.0.6
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: SevenEightTwo782
+    networks:
+      - my-network
+
+volumes:
+  mongodb-data:
+    external: true
+  mongodb-config:
+    external: true
+
+networks:
+  my-network:
+    external: true

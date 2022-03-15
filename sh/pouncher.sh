@@ -19,6 +19,7 @@ Services:
     redis           Redis Memcached Database
     sonarqube       Sonarqube Code Quality and Code Security
     sqlserver       SQLServer Database
+    mongodb         MongoDB Database
 "
 
 help="
@@ -68,6 +69,36 @@ if [ $command == "start" ]; then
     kafka)
         if [[ ! -f ~/$dir/kafka-cli.yaml ]]; then
             curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
+        fi
+
+        zookeeperSecrets=`docker volume ls -q -f name=zookeeper-secrets`
+        if [ -z "$zookeeperSecrets" ];  then
+            zookeeperSecrets=`docker volume create zookeeper-secrets`
+            echo "Create docker volume: $zookeeperSecrets"
+        fi
+
+        zookeeperData=`docker volume ls -q -f name=zookeeper-data`
+        if [ -z "$zookeeperData" ];  then
+            zookeeperData=`docker volume create zookeeper-data`
+            echo "Create docker volume: $zookeeperData"
+        fi
+
+        zookeeperLogs=`docker volume ls -q -f name=zookeeper-logs`
+        if [ -z "$zookeeperLogs" ];  then
+            zookeeperLogs=`docker volume create zookeeper-logs`
+            echo "Create docker volume: $zookeeperLogs"
+        fi
+
+        kafkaSecrets=`docker volume ls -q -f name=kafka-secrets`
+        if [ -z "$kafkaSecrets" ];  then
+            kafkaSecrets=`docker volume create kafka-secrets`
+            echo "Create docker volume: $kafkaSecrets"
+        fi
+
+        kafkaData=`docker volume ls -q -f name=kafka-data`
+        if [ -z "$kafkaData" ];  then
+            kafkaData=`docker volume create kafka-data`
+            echo "Create docker volume: $kafkaData"
         fi
 
         docker compose -f ~/$dir/kafka-cli.yaml -p kafka-cli up -d 
@@ -138,6 +169,20 @@ if [ $command == "start" ]; then
             curl -o ~/$dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yaml
         fi
 
+        redisBitnamiData=`docker volume ls -q -f name=redis-bitnami-data`
+
+        if [ -z "$redisBitnamiData" ];  then
+            redisBitnamiData=`docker volume create redis-bitnami-data`
+            echo "Create docker volume: $redisBitnamiData"
+        fi
+
+        redisData=`docker volume ls -q -f name=redis-data`
+
+        if [ -z "$redisData" ];  then
+            redisData=`docker volume create redis-data`
+            echo "Create docker volume: $redisData"
+        fi
+
         docker compose -f ~/$dir/redis.yaml -p redis up -d
 
         echo "Redis has started."
@@ -205,6 +250,30 @@ if [ $command == "start" ]; then
         echo "SQLServer has started."
         exit 0
     ;;
+    mongodb)
+        if [[ ! -f ~/$dir/mongodb.yaml ]]; then
+            curl -o ~/$dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mongodb.yaml
+        fi
+        
+        mongodbData=`docker volume ls -q -f name=mongodb-data`
+
+        if [ -z "$mongodbData" ];  then
+            mongodbData=`docker volume create mongodb-data`
+            echo "Create docker volume: $mongodbData"
+
+            mongodbConfig=`docker volume ls -q -f name=mongodb-config`
+            
+            if [ -z "$mongodbConfig" ];  then
+                mongodbConfig=`docker volume create mongodb-config`
+                echo "Create docker volume: $mongodbConfig"
+            fi
+        fi
+
+        docker compose -f ~/$dir/mongodb.yaml -p mongodb up -d
+
+        echo "MongoDB has started."
+        exit 0
+    ;;
     *)
     echo "$invalidService"
     exit 0
@@ -217,7 +286,7 @@ elif [ $command == "stop" ]; then
             curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
         fi
         docker compose -f ~/$dir/kafka-cli.yaml -p kafka-cli down -v
-        echo "Kafka has stopped."
+        echo "Kafka has stoped."
     ;;
     mysql)
         if [[ ! -f ~/$dir/mysql.yaml ]]; then
@@ -226,7 +295,7 @@ elif [ $command == "stop" ]; then
 
         docker compose -f ~/$dir/mysql.yaml -p mysql down -v
 
-        echo "MySQL has stopped."
+        echo "MySQL has stoped."
         exit 0
     ;;
     postgresql)
@@ -236,7 +305,7 @@ elif [ $command == "stop" ]; then
 
         docker compose -f ~/$dir/postgresql.yaml -p postgresql down -v
 
-        echo "PostgreSQL has stopped."
+        echo "PostgreSQL has stoped."
         exit 0
     ;;
     rabbitmq)
@@ -246,7 +315,7 @@ elif [ $command == "stop" ]; then
 
         docker compose -f ~/$dir/rabbitmq.yaml -p rabbitmq down -v
 
-        echo "RabbitMQ has stopped."
+        echo "RabbitMQ has stoped."
         exit 0
     ;;
     redis)
@@ -256,7 +325,7 @@ elif [ $command == "stop" ]; then
 
         docker compose -f ~/$dir/redis.yaml -p redis down -v
 
-        echo "Redis has stopped."
+        echo "Redis has stoped."
         exit 0
     ;;
     sonarqube)
@@ -266,7 +335,7 @@ elif [ $command == "stop" ]; then
 
         docker compose -f ~/$dir/sonarqube.yaml -p sonarqube down -v
 
-        echo "Sonarqube has stopped."
+        echo "Sonarqube has stoped."
         exit 0
     ;;
     sqlserver)
@@ -276,7 +345,17 @@ elif [ $command == "stop" ]; then
 
         docker compose -f ~/$dir/sqlserver.yaml -p sqlserver down -v
 
-        echo "SQLServer has stopped."
+        echo "SQLServer has stoped."
+        exit 0
+    ;;
+    mongodb)
+        if [[ ! -f ~/$dir/mongodb.yaml ]]; then
+            curl -o ~/$dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mongodb.yaml
+        fi
+
+        docker compose -f ~/$dir/mongodb.yaml -p mongodb down -v
+
+        echo "MongoDB has stoped."
         exit 0
     ;;
     *)

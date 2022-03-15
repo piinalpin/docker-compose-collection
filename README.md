@@ -13,7 +13,7 @@ docker-compose -f $FILENAME down -v
 Download docker compose configuration using curl
 
 ```bash
-curl -o kafka-cli.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yml
+curl -o kafka-cli.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
 ```
 
 This yaml `kafka-cli.yaml` will create a new container `zookeeper` and exposed port `2181` on host port. Also create a new container `kafka` and exposed port `29092`, `9092` and `9101` on host port.
@@ -25,7 +25,7 @@ By default there are 16 databases (indexed from 0 to 15) and you can navigate be
 Download docker compose configuration using curl
 
 ```bash
-curl -o redis.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yml
+curl -o redis.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/redis.yaml
 ```
 
 This yaml `redis.yaml` will create a new container `redis` and exposed port `6379` on host port.
@@ -79,7 +79,7 @@ Another Redis Desktop Manager add new key.
 Download docker compose configuration using curl
 
 ```bash
-curl -o mysql.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mysql.yml
+curl -o mysql.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mysql.yaml
 ```
 
 This yaml `mysql.yaml` will create a new container `mysql` and exposed port `3306` on host port.
@@ -124,7 +124,7 @@ docker exec -it mysql bash
 Download docker compose configuration using curl
 
 ```bash
-curl -o postgresql.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/postgresql.yml
+curl -o postgresql.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/postgresql.yaml
 ```
 
 This yaml `postgresql.yaml` will create a new container `postgresql` and exposed port `5432` on host port.
@@ -170,7 +170,7 @@ docker exec -it postgresql bash
 Download docker compose configuration using curl
 
 ```bash
-curl -o sqlserver.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sqlserver.yml
+curl -o sqlserver.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sqlserver.yaml
 ```
 
 This yaml `sqlserver.yaml` will create a new container `sqlserver` and exposed port `1433` on host port.
@@ -213,7 +213,7 @@ docker exec -it sqlserver /opt/mssql-tools/bin/sqlcmd -U sa -P SevenEightTwo782
 Download docker compose configuration using curl
 
 ```bash
-curl -o rabbitmq.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/rabbitmq.yml
+curl -o rabbitmq.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/rabbitmq.yaml
 ```
 
 This yaml `rabbitmq.yaml` will create a new container `rabbitmq` and exposed port `5672` and `15672` on host port.
@@ -241,7 +241,7 @@ Default RabbitMQ management user is `guest` and password is `guest`. Go to `loca
 Download docker compose configuration using curl
 
 ```bash
-curl -o sonarqube.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sonarqube.yml
+curl -o sonarqube.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sonarqube.yaml
 ```
 
 This yaml `sonarqube.yaml` will create a new container `sonarqube` and exposed port `9000` and `9002` on host port.
@@ -263,3 +263,82 @@ docker volume create sonarqube-data && docker volume create sonarqube-extensions
 Default Sonarqube management user is `admin` and password is `admin`. Go to `localhost:9000` to acess Sonarqube management and then change the default password first.
 
 ![Sonarqube Management](images/sonarqube-management.png)
+
+## MongoDB
+Download docker compose configuration using curl
+
+```bash
+curl -o sonarqube.yml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mongodb.yaml
+```
+
+This yaml `sonarqube.yaml` will create a new container `sonarqube` and exposed port `27017` on host port.
+
+Create network `my-network` if does not exists
+
+```bash
+docker network create my-network
+```
+
+Create volume to persist data then run `docker-compose`
+
+```bash
+docker volume create mongodb-data && docker volume create mongodb-config
+```
+
+**MongoDB CLI**
+Run this command to run MongoDB command on container. Default user is `root` and password `SevenEightTwo782` you can change the password in `yaml` file.
+
+```bash
+docker exec -it mongodb mongo -u root -p SevenEightTwo782 --authenticationDatabase admin <SOME_DATABASE>
+```
+
+**Basic command:**
+
+-   Get list of databases
+    ```js
+    show dbs
+    ```
+-   Create database and use database
+    ```js
+    use some_db
+    db
+    ```
+-   Create collection
+    ```js
+    db.createCollection('some_collection');
+    ```
+-   Insert row
+    ```js
+    db.some_db.insertMany([
+        {
+            _id: 1,
+            first_name: "Maverick",
+            last_name: "Johnson",
+            gender: 1
+        },
+        {
+            _id: 2,
+            first_name: "Calvin",
+            last_name: "Joe",
+            gender: 1
+        },
+        {
+            _id: 3,
+            first_name: "Kagura",
+            last_name: "Otsusuki",
+            gender: 0
+        }
+    ]);
+    ```
+- Find row
+    ```js
+    db.some_db.find();
+    ```
+- Update row
+    ```js
+    db.test.updateOne({_id: 1}, {$set: {
+        first_name: "Maverick",
+        last_name: "Johnson Updated",
+        gender: 1
+    }});
+    ```

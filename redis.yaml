@@ -4,14 +4,24 @@ services:
   redis:
     ports:
       - "6379:6379"
-    image: bitnami/redis:latest
+    image: redis:latest
     container_name: redis
-    environment:
-      REDIS_PASSWORD: 'SevenEightTwo782'
-    command: /opt/bitnami/scripts/redis/run.sh --maxmemory 100mb
+    command:
+      - redis-server
+      - --maxmemory 256mb
+      - --maxmemory-policy allkeys-lru
     volumes:
-      - 'redis_data:/bitnami/redis/data'
+      - 'redis-bitnami-data:/bitnami/redis/data'
+      - 'redis-data:/data'
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    external: true
 
 volumes:
-  redis_data:
-    driver: local
+  redis-bitnami-data:
+    external: true
+  redis-data:
+    external: true

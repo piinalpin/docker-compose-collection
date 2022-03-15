@@ -23,7 +23,7 @@ fi
 
 if [ $# = 1 ]; then
     if [[ ! -f "$FILE" ]]; then
-        curl -o $FILE https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/$FILE
+        curl -o $FILE https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
     fi
 
     if [ $* = "start" ]; then
