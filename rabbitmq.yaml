@@ -11,7 +11,7 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq/
       - rabbitmq-log:/var/log/rabbitmq
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   rabbitmq-data:
@@ -20,5 +20,5 @@ volumes:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true

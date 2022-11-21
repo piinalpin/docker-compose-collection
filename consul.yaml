@@ -11,12 +11,12 @@ services:
       - consul-data:/consul/data
     command: "agent -server -ui -node=consul -bootstrap-expect=1 -client=0.0.0.0"
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   consul-data:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true

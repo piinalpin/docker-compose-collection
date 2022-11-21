@@ -13,12 +13,12 @@ services:
       PGDATA: /var/lib/postgresql/data
       POSTGRES_PASSWORD: 'SevenEightTwo782' # Change to your unique password
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   postgre-data:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true

@@ -12,12 +12,12 @@ services:
       # Default user is -> root
       MYSQL_ROOT_PASSWORD: 'SevenEightTwo782' # Change to your unique password
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   mysql-data:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true

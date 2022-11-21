@@ -13,7 +13,7 @@ services:
       - sonarqube-logs:/opt/sonarqube/logs
       - sonarqube-temp:/opt/sonarqube/temp
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   sonarqube-data:
@@ -26,5 +26,5 @@ volumes:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true

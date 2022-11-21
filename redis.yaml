@@ -14,10 +14,10 @@ services:
       - 'redis-bitnami-data:/bitnami/redis/data'
       - 'redis-data:/data'
     networks:
-      - my-network
+      - archlabs-network
 
 networks:
-  my-network:
+  archlabs-network:
     external: true
 
 volumes:

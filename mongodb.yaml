@@ -13,7 +13,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: SevenEightTwo782
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   mongodb-data:
@@ -22,5 +22,5 @@ volumes:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true

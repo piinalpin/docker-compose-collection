@@ -14,7 +14,7 @@ services:
       ACCEPT_EULA: 'Y'
       SA_PASSWORD: 'SevenEightTwo782' # Change to your unique password
     networks:
-      - my-network
+      - archlabs-network
 
 volumes:
   sqlserver-data:
@@ -23,5 +23,5 @@ volumes:
     external: true
 
 networks:
-  my-network:
+  archlabs-network:
     external: true
