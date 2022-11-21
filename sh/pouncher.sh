@@ -12,6 +12,7 @@ Commands:
     stop    stop service
 
 Services:
+    consul          Consul Hashicorp
     kafka           Kafka AMQ Stream
     mysql           MySQL Database
     postgresql      PostgreSQL Database
@@ -21,7 +22,45 @@ Services:
     sqlserver       SQLServer Database
     mongodb         MongoDB Database
     kafka-redis     Run Kafka AMQ Stream and Redis Database
+    mysql-redis     Run MySQL and Redis Database
+    consul-redis    Run Consul and Redis
 "
+
+help="
+$(basename "$0"): '$1' is not a ./$(basename "$0") command.
+See './$(basename "$0") --help'
+"
+
+
+if [ "$1" == "--help" ] ; then
+    echo "$usage"
+    exit 0
+fi
+
+while getopts ":n:c:" opt; do
+  case $opt in
+    n) name="$OPTARG"
+    ;;
+    c) command="$OPTARG"
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    echo "$usage"
+    exit 0
+    ;;
+  esac
+done
+
+invalidCommand="
+$(basename "$0"): '$command' is not a ./$(basename "$0") command.
+See './$(basename "$0") --help'
+"
+
+invalidService="
+$(basename "$0"): '$name' is not a ./$(basename "$0") service.
+See './$(basename "$0") --help'
+"
+dir=pouncher
+mkdir -p $dir
 
 # ----- BLOCK KAFKA -----
 start_kafka() {
@@ -60,8 +99,11 @@ start_kafka() {
     fi
 
     docker compose -f ~/$dir/kafka-cli.yaml -p kafka-cli up -d
+
+    echo "Also starting crypto generator."
+    docker compose -f ~/$dir/encryption-tool-generator.yaml up -d
+
     echo "Kafka has started."
-    exit 0
 }
 
 stop_kafka() {
@@ -69,6 +111,7 @@ stop_kafka() {
         curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/kafka-cli.yaml
     fi
     docker compose -f ~/$dir/kafka-cli.yaml -p kafka-cli down -v
+    docker compose -f ~/$dir/encryption-tool-generator.yaml down -v
     echo "Kafka has stoped."
 }
 # ----- BLOCK KAFKA -----
@@ -78,7 +121,7 @@ start_mysql() {
     if [[ ! -f ~/$dir/mysql.yaml ]]; then
         curl -o ~/$dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mysql.yaml
     fi
-    
+
     mysqlData=`docker volume ls -q -f name=mysql-data`
 
     if [ -z "$mysqlData" ];  then
@@ -89,7 +132,6 @@ start_mysql() {
     docker compose -f ~/$dir/mysql.yaml -p mysql up -d
 
     echo "MySQL has started."
-    exit 0
 }
 
 stop_mysql() {
@@ -100,7 +142,6 @@ stop_mysql() {
     docker compose -f ~/$dir/mysql.yaml -p mysql down -v
 
     echo "MySQL has stoped."
-    exit 0
 }
 # ----- BLOCK MYSQL -----
 
@@ -109,7 +150,7 @@ start_postgresql() {
     if [[ ! -f ~/$dir/postgresql.yaml ]]; then
         curl -o ~/$dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/postgresql.yaml
     fi
-    
+
     postgreData=`docker volume ls -q -f name=postgre-data`
 
     if [ -z "$postgreData" ];  then
@@ -120,7 +161,6 @@ start_postgresql() {
     docker compose -f ~/$dir/postgresql.yaml -p postgresql up -d
 
     echo "PostgreSQL has started."
-    exit 0
 }
 
 stop_postgresql() {
@@ -131,7 +171,6 @@ stop_postgresql() {
     docker compose -f ~/$dir/postgresql.yaml -p postgresql down -v
 
     echo "PostgreSQL has stoped."
-    exit 0
 }
 # ----- BLOCK POSTGRESQL -----
 
@@ -140,7 +179,7 @@ start_rabbitmq() {
     if [[ ! -f ~/$dir/rabbitmq.yaml ]]; then
         curl -o ~/$dir/rabbitmq.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/rabbitmq.yaml
     fi
-    
+
     rabbitmqData=`docker volume ls -q -f name=rabbitmq-data`
 
     if [ -z "$rabbitmqData" ];  then
@@ -148,7 +187,7 @@ start_rabbitmq() {
         echo "Create docker volume: $rabbitmqData"
 
         rabbitmqLog=`docker volume ls -q -f name=rabbitmq-log`
-        
+
         if [ -z "$rabbitmqLog" ];  then
             rabbitmqLog=`docker volume create rabbitmq-log`
             echo "Create docker volume: $rabbitmqLog"
@@ -158,7 +197,6 @@ start_rabbitmq() {
     docker compose -f ~/$dir/rabbitmq.yaml -p rabbitmq up -d
 
     echo "RabbitMQ has started."
-    exit 0
 }
 
 stop_rabbitmq() {
@@ -169,7 +207,6 @@ stop_rabbitmq() {
     docker compose -f ~/$dir/rabbitmq.yaml -p rabbitmq down -v
 
     echo "RabbitMQ has stoped."
-    exit 0
 }
 # ----- BLOCK RABBITMQ -----
 
@@ -196,7 +233,6 @@ start_redis() {
     docker compose -f ~/$dir/redis.yaml -p redis up -d
 
     echo "Redis has started."
-    exit 0
 }
 
 stop_redis() {
@@ -207,7 +243,6 @@ stop_redis() {
     docker compose -f ~/$dir/redis.yaml -p redis down -v
 
     echo "Redis has stoped."
-    exit 0
 }
 # ----- BLOCK REDIS -----
 
@@ -216,7 +251,7 @@ start_sonarqube() {
     if [[ ! -f ~/$dir/sonarqube.yaml ]]; then
         curl -o ~/$dir/sonarqube.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sonarqube.yaml
     fi
-    
+
     sonarqubeData=`docker volume ls -q -f name=sonarqube-data`
 
     if [ -z "$sonarqubeData" ];  then
@@ -224,19 +259,19 @@ start_sonarqube() {
         echo "Create docker volume: $sonarqubeData"
 
         sonarqubeExtensions=`docker volume ls -q -f name=sonarqube-extensions`
-        
+
         if [ -z "$sonarqubeExtensions" ];  then
             sonarqubeExtensions=`docker volume create sonarqube-extensions`
             echo "Create docker volume: $sonarqubeExtensions"
 
             sonarqubeLogs=`docker volume ls -q -f name=sonarqube-logs`
-        
+
             if [ -z "$sonarqubeLogs" ];  then
                 sonarqubeLogs=`docker volume create sonarqube-logs`
                 echo "Create docker volume: $sonarqubeLogs"
 
                 sonarqubeTemp=`docker volume ls -q -f name=sonarqube-temp`
-        
+
                 if [ -z "$sonarqubeTemp" ];  then
                     sonarqubeTemp=`docker volume create sonarqube-temp`
                     echo "Create docker volume: $sonarqubeTemp"
@@ -248,7 +283,6 @@ start_sonarqube() {
     docker compose -f ~/$dir/sonarqube.yaml -p sonarqube up -d
 
     echo "Sonarqube has started."
-    exit 0
 }
 
 stop_sonarqube() {
@@ -259,7 +293,6 @@ stop_sonarqube() {
     docker compose -f ~/$dir/sonarqube.yaml -p sonarqube down -v
 
     echo "Sonarqube has stoped."
-    exit 0
 }
 # ----- BLOCK SONARQUBE -----
 
@@ -268,7 +301,7 @@ start_sqlserver() {
     if [[ ! -f ~/$dir/sqlserver.yaml ]]; then
         curl -o ~/$dir/sqlserver.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/sqlserver.yaml
     fi
-    
+
     sqlserverData=`docker volume ls -q -f name=sqlserver-data`
 
     if [ -z "$sqlserverData" ];  then
@@ -276,7 +309,7 @@ start_sqlserver() {
         echo "Create docker volume: $sqlserverData"
 
         sqlserverUser=`docker volume ls -q -f name=sqlserver-user`
-        
+
         if [ -z "$sqlserverUser" ];  then
             sqlserverUser=`docker volume create sqlserver-user`
             echo "Create docker volume: $sqlserverUser"
@@ -286,7 +319,6 @@ start_sqlserver() {
     docker compose -f ~/$dir/sqlserver.yaml -p sqlserver up -d
 
     echo "SQLServer has started."
-    exit 0
 }
 
 stop_sqlserver() {
@@ -297,7 +329,6 @@ stop_sqlserver() {
     docker compose -f ~/$dir/sqlserver.yaml -p sqlserver down -v
 
     echo "SQLServer has stoped."
-    exit 0
 }
 # ----- BLOCK SQLSERVER -----
 
@@ -306,7 +337,7 @@ start_mongodb() {
     if [[ ! -f ~/$dir/mongodb.yaml ]]; then
         curl -o ~/$dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/mongodb.yaml
     fi
-    
+
     mongodbData=`docker volume ls -q -f name=mongodb-data`
 
     if [ -z "$mongodbData" ];  then
@@ -314,7 +345,7 @@ start_mongodb() {
         echo "Create docker volume: $mongodbData"
 
         mongodbConfig=`docker volume ls -q -f name=mongodb-config`
-        
+
         if [ -z "$mongodbConfig" ];  then
             mongodbConfig=`docker volume create mongodb-config`
             echo "Create docker volume: $mongodbConfig"
@@ -324,7 +355,6 @@ start_mongodb() {
     docker compose -f ~/$dir/mongodb.yaml -p mongodb up -d
 
     echo "MongoDB has started."
-    exit 0
 }
 
 stop_mongodb() {
@@ -335,45 +365,37 @@ stop_mongodb() {
     docker compose -f ~/$dir/mongodb.yaml -p mongodb down -v
 
     echo "MongoDB has stoped."
-    exit 0
 }
 # ----- BLOCK MONGODB -----
 
-help="
-$(basename "$0"): '$1' is not a ./$(basename "$0") command.
-See './$(basename "$0") --help'
-"
+# ----- BLOCK CONSUL -----
+start_consul() {
+    if [[ ! -f ~/$dir/consul.yaml ]]; then
+        curl -o ~/$dir/consul.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/consul.yaml
+    fi
 
+    consulData=`docker volume ls -q -f name=consul-data`
 
-if [ "$1" == "--help" ] ; then
-    echo "$usage"
-    exit 0
-fi
+    if [ -z "$consulData" ];  then
+        consulData=`docker volume create consul-data`
+        echo "Create docker volume: $consulData"
+    fi
 
-while getopts ":n:c:" opt; do
-  case $opt in
-    n) name="$OPTARG"
-    ;;
-    c) command="$OPTARG"
-    ;;
-    \?) echo "Invalid option -$OPTARG" >&2
-    echo "$usage"
-    exit 0
-    ;;
-  esac
-done
+    docker compose -f ~/$dir/consul.yaml -p consul up -d
 
-invalidCommand="
-$(basename "$0"): '$command' is not a ./$(basename "$0") command.
-See './$(basename "$0") --help'
-"
+    echo "Consul has started."
+}
 
-invalidService="
-$(basename "$0"): '$name' is not a ./$(basename "$0") service.
-See './$(basename "$0") --help'
-"
-dir=pouncher
-mkdir -p $dir
+stop_consul() {
+    if [[ ! -f ~/$dir/consul.yaml ]]; then
+        curl -o ~/$dir/consul.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/master/consul.yaml
+    fi
+
+    docker compose -f ~/$dir/consul.yaml -p consul down -v
+
+    echo "Consul has stoped."
+}
+# ----- BLOCK CONSUL -----
 
 if [ $command == "start" ]; then
     net=`docker network ls -q -f name=my-network`
@@ -385,31 +407,54 @@ if [ $command == "start" ]; then
     case $name in
     kafka)
         start_kafka
+        exit 0
     ;;
     mysql)
         start_mysql
+        exit 0
     ;;
     postgresql)
         start_postgresql
+        exit 0
     ;;
     rabbitmq)
         start_rabbitmq
+        exit 0
     ;;
     redis)
         start_redis
+        exit 0
     ;;
     sonarqube)
         start_sonarqube
+        exit 0
     ;;
     sqlserver)
         start_sqlserver
+        exit 0
     ;;
     mongodb)
         start_mongodb
+        exit 0
     ;;
     kafka-redis)
         start_kafka
         start_redis
+        exit 0
+    ;;
+    mysql-redis)
+        start_mysql
+        start_redis
+        exit 0
+    ;;
+    consul)
+        start_consul
+        exit 0
+    ;;
+    consul-redis)
+        start_consul
+        start_redis
+        exit 0
     ;;
     *)
     echo "$invalidService"
@@ -420,31 +465,54 @@ elif [ $command == "stop" ]; then
     case $name in
     kafka)
         stop_kafka
+        exit 0
     ;;
     mysql)
         stop_mysql
+        exit 0
     ;;
     postgresql)
         stop_postgresql
+        exit 0
     ;;
     rabbitmq)
         stop_rabbitmq
+        exit 0
     ;;
     redis)
         stop_redis
+        exit 0
     ;;
     sonarqube)
         stop_sonarqube
+        exit 0
     ;;
     sqlserver)
         stop_sqlserver
+        exit 0
     ;;
     mongodb)
         stop_mongodb
+        exit 0
     ;;
     kafka-redis)
         stop_kafka
         stop_redis
+        exit 0
+    ;;
+    mysql-redis)
+        stop_mysql
+        stop_redis
+        exit 0
+    ;;
+    consul)
+        stop_consul
+        exit 0
+    ;;
+    consul-redis)
+        stop_consul
+        stop_redis
+        exit 0
     ;;
     *)
     echo "$invalidService"

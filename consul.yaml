@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  
+  consul:
+    image: consul:1.13.2
+    container_name: consul
+    ports:
+      - '8500:8500'
+      - '8600:8600/udp'
+    volumes:
+      - consul-data:/consul/data
+    command: "agent -server -ui -node=consul -bootstrap-expect=1 -client=0.0.0.0"
+    networks:
+      - my-network
+
+volumes:
+  consul-data:
+    external: true
+
+networks:
+  my-network:
+    external: true
