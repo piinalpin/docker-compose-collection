@@ -59,13 +59,13 @@ invalidService="
 $(basename "$0"): '$name' is not a ./$(basename "$0") service.
 See './$(basename "$0") --help'
 "
-dir=pouncher
+dir=$HOME/.config/pouncher
 mkdir -p $dir
 
 # ----- BLOCK KAFKA -----
 start_kafka() {
-    if [[ ! -f ~/$dir/kafka-cli.yaml ]]; then
-        curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/kafka-cli.yaml
+    if [[ ! -f $dir/kafka-cli.yaml ]]; then
+        curl -o $dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/kafka-cli.yaml
     fi
 
     zookeeperSecrets=`podman volume ls -q -f name=zookeeper-secrets`
@@ -98,23 +98,23 @@ start_kafka() {
         echo "Create podman volume: $kafkaData"
     fi
 
-    podman-compose -f ~/$dir/kafka-cli.yaml -p kafka-cli up -d
+    podman-compose -f $dir/kafka-cli.yaml -p kafka-cli up -d
     echo "Kafka has started."
 }
 
 stop_kafka() {
-    if [[ ! -f ~/$dir/kafka-cli.yaml ]]; then
-        curl -o ~/$dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/kafka-cli.yaml
+    if [[ ! -f $dir/kafka-cli.yaml ]]; then
+        curl -o $dir/kafka-cli.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/kafka-cli.yaml
     fi
-    podman-compose -f ~/$dir/kafka-cli.yaml -p kafka-cli down -v
+    podman-compose -f $dir/kafka-cli.yaml -p kafka-cli down -v
     echo "Kafka has stoped."
 }
 # ----- BLOCK KAFKA -----
 
 # ----- BLOCK MYSQL -----
 start_mysql() {
-    if [[ ! -f ~/$dir/mysql.yaml ]]; then
-        curl -o ~/$dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mysql.yaml
+    if [[ ! -f $dir/mysql.yaml ]]; then
+        curl -o $dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mysql.yaml
     fi
 
     mysqlData=`podman volume ls -q -f name=mysql-data`
@@ -124,17 +124,17 @@ start_mysql() {
         echo "Create podman volume: $mysqlData"
     fi
 
-    podman-compose -f ~/$dir/mysql.yaml -p mysql up -d
+    podman-compose -f $dir/mysql.yaml -p mysql up -d
 
     echo "MySQL has started."
 }
 
 stop_mysql() {
-    if [[ ! -f ~/$dir/mysql.yaml ]]; then
-        curl -o ~/$dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mysql.yaml
+    if [[ ! -f $dir/mysql.yaml ]]; then
+        curl -o $dir/mysql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mysql.yaml
     fi
 
-    podman-compose -f ~/$dir/mysql.yaml -p mysql down -v
+    podman-compose -f $dir/mysql.yaml -p mysql down -v
 
     echo "MySQL has stoped."
 }
@@ -142,8 +142,8 @@ stop_mysql() {
 
 # ----- BLOCK POSTGRESQL -----
 start_postgresql() {
-    if [[ ! -f ~/$dir/postgresql.yaml ]]; then
-        curl -o ~/$dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/postgresql.yaml
+    if [[ ! -f $dir/postgresql.yaml ]]; then
+        curl -o $dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/postgresql.yaml
     fi
 
     postgreData=`podman volume ls -q -f name=postgre-data`
@@ -153,17 +153,17 @@ start_postgresql() {
         echo "Create podman volume: $postgreData"
     fi
 
-    podman-compose -f ~/$dir/postgresql.yaml -p postgresql up -d
+    podman-compose -f $dir/postgresql.yaml -p postgresql up -d
 
     echo "PostgreSQL has started."
 }
 
 stop_postgresql() {
-    if [[ ! -f ~/$dir/postgresql.yaml ]]; then
-        curl -o ~/$dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/postgresql.yaml
+    if [[ ! -f $dir/postgresql.yaml ]]; then
+        curl -o $dir/postgresql.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/postgresql.yaml
     fi
 
-    podman-compose -f ~/$dir/postgresql.yaml -p postgresql down -v
+    podman-compose -f $dir/postgresql.yaml -p postgresql down -v
 
     echo "PostgreSQL has stoped."
 }
@@ -171,8 +171,8 @@ stop_postgresql() {
 
 # ----- BLOCK RABBITMQ -----
 start_rabbitmq() {
-    if [[ ! -f ~/$dir/rabbitmq.yaml ]]; then
-        curl -o ~/$dir/rabbitmq.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/rabbitmq.yaml
+    if [[ ! -f $dir/rabbitmq.yaml ]]; then
+        curl -o $dir/rabbitmq.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/rabbitmq.yaml
     fi
 
     rabbitmqData=`podman volume ls -q -f name=rabbitmq-data`
@@ -189,17 +189,17 @@ start_rabbitmq() {
         fi
     fi
 
-    podman-compose -f ~/$dir/rabbitmq.yaml -p rabbitmq up -d
+    podman-compose -f $dir/rabbitmq.yaml -p rabbitmq up -d
 
     echo "RabbitMQ has started."
 }
 
 stop_rabbitmq() {
-    if [[ ! -f ~/$dir/rabbitmq.yaml ]]; then
-        curl -o ~/$dir/rabbitmq.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/rabbitmq.yaml
+    if [[ ! -f $dir/rabbitmq.yaml ]]; then
+        curl -o $dir/rabbitmq.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/rabbitmq.yaml
     fi
 
-    podman-compose -f ~/$dir/rabbitmq.yaml -p rabbitmq down -v
+    podman-compose -f $dir/rabbitmq.yaml -p rabbitmq down -v
 
     echo "RabbitMQ has stoped."
 }
@@ -207,8 +207,8 @@ stop_rabbitmq() {
 
 # ----- BLOCK REDIS -----
 start_redis() {
-    if [[ ! -f ~/$dir/redis.yaml ]]; then
-        curl -o ~/$dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/redis.yaml
+    if [[ ! -f $dir/redis.yaml ]]; then
+        curl -o $dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/redis.yaml
     fi
 
     redisBitnamiData=`podman volume ls -q -f name=redis-bitnami-data`
@@ -225,17 +225,17 @@ start_redis() {
         echo "Create podman volume: $redisData"
     fi
 
-    podman-compose -f ~/$dir/redis.yaml -p redis up -d
+    podman-compose -f $dir/redis.yaml -p redis up -d
 
     echo "Redis has started."
 }
 
 stop_redis() {
-    if [[ ! -f ~/$dir/redis.yaml ]]; then
-        curl -o ~/$dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/redis.yaml
+    if [[ ! -f $dir/redis.yaml ]]; then
+        curl -o $dir/redis.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/redis.yaml
     fi
 
-    podman-compose -f ~/$dir/redis.yaml -p redis down -v
+    podman-compose -f $dir/redis.yaml -p redis down -v
 
     echo "Redis has stoped."
 }
@@ -243,8 +243,8 @@ stop_redis() {
 
 # ----- BLOCK SONARQUBE -----
 start_sonarqube() {
-    if [[ ! -f ~/$dir/sonarqube.yaml ]]; then
-        curl -o ~/$dir/sonarqube.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sonarqube.yaml
+    if [[ ! -f $dir/sonarqube.yaml ]]; then
+        curl -o $dir/sonarqube.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sonarqube.yaml
     fi
 
     sonarqubeData=`podman volume ls -q -f name=sonarqube-data`
@@ -275,17 +275,17 @@ start_sonarqube() {
         fi
     fi
 
-    podman-compose -f ~/$dir/sonarqube.yaml -p sonarqube up -d
+    podman-compose -f $dir/sonarqube.yaml -p sonarqube up -d
 
     echo "Sonarqube has started."
 }
 
 stop_sonarqube() {
-    if [[ ! -f ~/$dir/sonarqube.yaml ]]; then
-        curl -o ~/$dir/sonarqube.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sonarqube.yaml
+    if [[ ! -f $dir/sonarqube.yaml ]]; then
+        curl -o $dir/sonarqube.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sonarqube.yaml
     fi
 
-    podman-compose -f ~/$dir/sonarqube.yaml -p sonarqube down -v
+    podman-compose -f $dir/sonarqube.yaml -p sonarqube down -v
 
     echo "Sonarqube has stoped."
 }
@@ -293,8 +293,8 @@ stop_sonarqube() {
 
 # ----- BLOCK SQLSERVER -----
 start_sqlserver() {
-    if [[ ! -f ~/$dir/sqlserver.yaml ]]; then
-        curl -o ~/$dir/sqlserver.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sqlserver.yaml
+    if [[ ! -f $dir/sqlserver.yaml ]]; then
+        curl -o $dir/sqlserver.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sqlserver.yaml
     fi
 
     sqlserverData=`podman volume ls -q -f name=sqlserver-data`
@@ -311,17 +311,17 @@ start_sqlserver() {
         fi
     fi
 
-    podman-compose -f ~/$dir/sqlserver.yaml -p sqlserver up -d
+    podman-compose -f $dir/sqlserver.yaml -p sqlserver up -d
 
     echo "SQLServer has started."
 }
 
 stop_sqlserver() {
-    if [[ ! -f ~/$dir/sqlserver.yaml ]]; then
-        curl -o ~/$dir/sqlserver.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sqlserver.yaml
+    if [[ ! -f $dir/sqlserver.yaml ]]; then
+        curl -o $dir/sqlserver.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/sqlserver.yaml
     fi
 
-    podman-compose -f ~/$dir/sqlserver.yaml -p sqlserver down -v
+    podman-compose -f $dir/sqlserver.yaml -p sqlserver down -v
 
     echo "SQLServer has stoped."
 }
@@ -329,8 +329,8 @@ stop_sqlserver() {
 
 # ----- BLOCK MONGODB -----
 start_mongodb() {
-    if [[ ! -f ~/$dir/mongodb.yaml ]]; then
-        curl -o ~/$dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mongodb.yaml
+    if [[ ! -f $dir/mongodb.yaml ]]; then
+        curl -o $dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mongodb.yaml
     fi
 
     mongodbData=`podman volume ls -q -f name=mongodb-data`
@@ -347,17 +347,17 @@ start_mongodb() {
         fi
     fi
 
-    podman-compose -f ~/$dir/mongodb.yaml -p mongodb up -d
+    podman-compose -f $dir/mongodb.yaml -p mongodb up -d
 
     echo "MongoDB has started."
 }
 
 stop_mongodb() {
-    if [[ ! -f ~/$dir/mongodb.yaml ]]; then
-        curl -o ~/$dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mongodb.yaml
+    if [[ ! -f $dir/mongodb.yaml ]]; then
+        curl -o $dir/mongodb.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/mongodb.yaml
     fi
 
-    podman-compose -f ~/$dir/mongodb.yaml -p mongodb down -v
+    podman-compose -f $dir/mongodb.yaml -p mongodb down -v
 
     echo "MongoDB has stoped."
 }
@@ -365,8 +365,8 @@ stop_mongodb() {
 
 # ----- BLOCK CONSUL -----
 start_consul() {
-    if [[ ! -f ~/$dir/consul.yaml ]]; then
-        curl -o ~/$dir/consul.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/consul.yaml
+    if [[ ! -f $dir/consul.yaml ]]; then
+        curl -o $dir/consul.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/consul.yaml
     fi
 
     consulData=`podman volume ls -q -f name=consul-data`
@@ -376,17 +376,17 @@ start_consul() {
         echo "Create podman volume: $consulData"
     fi
 
-    podman-compose -f ~/$dir/consul.yaml -p consul up -d
+    podman-compose -f $dir/consul.yaml -p consul up -d
 
     echo "Consul has started."
 }
 
 stop_consul() {
-    if [[ ! -f ~/$dir/consul.yaml ]]; then
-        curl -o ~/$dir/consul.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/consul.yaml
+    if [[ ! -f $dir/consul.yaml ]]; then
+        curl -o $dir/consul.yaml https://raw.githubusercontent.com/piinalpin/docker-compose-collection/arch-linux/consul.yaml
     fi
 
-    podman-compose -f ~/$dir/consul.yaml -p consul down -v
+    podman-compose -f $dir/consul.yaml -p consul down -v
 
     echo "Consul has stoped."
 }
