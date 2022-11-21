@@ -2,7 +2,7 @@ version: "3.8"
 services:
   
   mysql:
-    image: mysql:latest
+    image: docker.io/library/mysql:8.0.31
     container_name: mysql
     ports:
       - '3306:3306'

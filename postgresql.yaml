@@ -2,7 +2,7 @@ version: "3.8"
 services:
   
   postgresql:
-    image: postgres:latest
+    image: docker.io/library/postgres:15.1
     container_name: postgresql
     ports:
       - '5432:5432'
